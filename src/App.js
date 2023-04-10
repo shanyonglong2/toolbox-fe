@@ -36,10 +36,15 @@ import {
 }from './components/CreateColumnDialog';
 
 import {
+  UpdatePasswordDialog
+}from './components/UpdatePasswordDialog'
+
+import {
   AddIcon,
   HamburgerIcon,
   ExternalLinkIcon,
   ArrowBackIcon,
+  LockIcon,
 } from '@chakra-ui/icons'
 
 import { useDisclosure } from '@chakra-ui/react'
@@ -56,6 +61,7 @@ function App() {
   const [columnsList, setColumnsList] = useState([]);
   const [createToolDialogVisible, setCreateToolDialogVisible] = useState(false);
   const [createColumnDialogVisible, setCreateColumnDialogVisible] = useState(false);
+  const [updatePasswordDialogVisible, setUpdatePasswordDialogVisible] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const fetchTools = useCallback(() => {
     listTools((data)=>{
@@ -145,6 +151,11 @@ function App() {
                 新建栏目
               </MenuItem>
               <MenuItem
+                  onClick={()=>setUpdatePasswordDialogVisible(true)}
+                  icon={<LockIcon />}>
+                修改密码
+              </MenuItem>
+              <MenuItem
                   onClick={onOpen}
                   icon={<ArrowBackIcon />}>
                 退出登录
@@ -154,7 +165,7 @@ function App() {
 
         </Box>
         <Box padding={5}>
-          <Heading>媒体云工具集 v0.1</Heading>
+          <Heading>媒体云工具集 v0.2</Heading>
         </Box>
         <Box padding={5}>
           <Tabs colorScheme='teal'>
@@ -203,6 +214,11 @@ function App() {
             isOpen={createColumnDialogVisible}
             onClose={()=>setCreateColumnDialogVisible(false)}
             onCreated={fetchTools}
+        />
+        <UpdatePasswordDialog
+            isOpen={updatePasswordDialogVisible}
+            onClose={()=>setUpdatePasswordDialogVisible(false)}
+            onCreated={()=>{}}
         />
       </Box>
     </ChakraProvider>

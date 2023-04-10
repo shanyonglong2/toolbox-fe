@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-let baseURL = "http://192.168.210.180:8088"
+let baseURL = "http://10.0.2.247:8089"
 
 export function login (username, password, onReceive, onError) {
     axios.post(baseURL+"/users/token", {name: username, password: password}).then((res) => {
@@ -20,6 +20,14 @@ export function listUsers (onReceive, onError) {
 
 export function getUser (id, onReceive, onError) {
     axios.get(baseURL+"/users/entities/"+id).then((res) => {
+        onReceive(res.data);
+    }).catch((err) => {
+        handleError(onError, err);
+    });
+}
+
+export function updatePassword(req, onReceive, onError) {
+    axios.put(baseURL+`/users/entities/${req.name}/password`, {old_password: req.oldPassword, new_password: req.newPassword}, authConfig()).then((res) => {
         onReceive(res.data);
     }).catch((err) => {
         handleError(onError, err);

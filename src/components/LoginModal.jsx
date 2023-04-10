@@ -51,7 +51,10 @@ export function LoginModal(props){
                     isClosable: true,
                 });
                 sessionStorage.setItem("token", data.data);
+                sessionStorage.setItem("userName", userName);
                 props.onLogin();
+                setPasswordInvalid(false);
+                setUserNameInvalid(false);
             },
             (err) => {
                 if(err == "incorrect username") {
