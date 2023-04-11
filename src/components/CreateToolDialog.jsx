@@ -239,7 +239,7 @@ export function CreateToolDialog(props) {
                                 </Select>
                             </FormControl>
 
-                            <FormControl>
+                            <FormControl isRequired>
                                 <FormLabel>工具说明</FormLabel>
                                 <Textarea
                                     placeholder='请输入工具说明'

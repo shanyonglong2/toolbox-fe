@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import {useCallback, useEffect, useState} from "react";
 import {
     useToast,
     Button,
@@ -21,47 +21,31 @@ import {
 } from '@chakra-ui/react';
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons'
 
-import { putColumn } from '../api/api';
+import {putColumn, listColumns, listEnvironments, uploadProfile} from '../api/api';
 
 let profile = "";
-export function CreateColumnDialog(props) {
+export function UpdateColumnDialog(props) {
     const toast = useToast();
-    const [name, setName] = useState('');
-    const [priority, setPriority] = useState(0);
 
-    const [nameInvalid, setNameInvalid] = useState(false);
-
-    const validTool = () => {
-        if (name == "") {
-            setNameInvalid(true);
-            return false;
-        }
-        return true;
-    }
     const resetForm = () => {
-        setName('');
-        setPriority(0);
-        setNameInvalid(false);
+        props.setPriority(0);
     }
-    const doCreateColumn = () => {
-        if (!validTool()) {
-            return;
-        }
+    const doPutColumn = () => {
         putColumn({
-            name: name,
-            priority: Number(priority),
+            name: props.column.name,
+            priority: Number(props.column.priority),
         }).then((data) => {
             toast({
-                title: '新建栏目成功',
-                description: "栏目" + name + "已经成功创建",
+                title: '修改栏目成功',
+                description: "栏目" + props.column.name + "已经修改成功",
                 status: 'success',
                 duration: 9000,
                 isClosable: true,
             });
-            props.onCreated();
+            props.onUpdated();
         }).catch((err) => {
             toast({
-                title: '新建栏目失败',
+                title: '修改栏目失败',
                 description: err,
                 status: 'error',
                 duration: 9000,
@@ -82,30 +66,21 @@ export function CreateColumnDialog(props) {
             >
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>新建栏目</ModalHeader>
+                    <ModalHeader>修改栏目</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Stack spacing={3}>
-                            <FormControl isRequired>
-                                <FormLabel>栏目名称</FormLabel>
-                                <Input
-                                    isInvalid={nameInvalid}
-                                    placeholder={'请输入栏目名称'}
-                                    value={name}
-                                    onChange={(event) => {
-                                        setName(event.target.value);
-                                    }
-                                    }
-                                />
+                        <FormControl >
+                                <FormLabel>栏目名称： {props.column.name}</FormLabel>
                             </FormControl>
-                            <FormControl isRequired>
+                        <FormControl isRequired>
                                 <FormLabel>优先级</FormLabel>
                                 <NumberInput
-                                    value={priority}
+                                    value={props.column.priority}
                                     min={0}
                                     max={100}
                                     onChange={(val) => {
-                                        setPriority(val);
+                                        props.setPriority(val);
                                     }}>
                                     <NumberInputField />
                                     <NumberInputStepper>
@@ -118,8 +93,8 @@ export function CreateColumnDialog(props) {
                     </ModalBody>
                     <ModalFooter>
                         <Button variant='ghost' mr={3} onClick={props.onClose}>取消</Button>
-                        <Button colorScheme='teal' onClick={doCreateColumn}>
-                            新建
+                        <Button colorScheme='teal' onClick={doPutColumn}>
+                            修改
                         </Button>
                     </ModalFooter>
                 </ModalContent>

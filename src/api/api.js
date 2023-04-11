@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-let baseURL = "http://10.0.2.247:8089"
+// let baseURL = "http://10.0.2.247:8089"
+let baseURL = "http://localhost:8089"
 
 export function login (username, password, onReceive, onError) {
     axios.post(baseURL+"/users/token", {name: username, password: password}).then((res) => {
@@ -66,12 +67,15 @@ export function deleteTool (id, onReceive, onError) {
     });
 }
 
-export function putColumn (column, onReceive, onError) {
-    axios.put(baseURL+"/columns/"+column.name, column, authConfig()).then((res) => {
-        onReceive(res.data);
-    }).catch((err) => {
-        handleError(onError, err);
+export function putColumn (column) {
+    return new Promise((resolve, reject) => {
+        axios.put(baseURL+"/columns/"+column.name, column, authConfig()).then((res) => {
+            resolve(res.data);
+        }).catch((err) => {
+            handleError(reject, err);
+        });
     });
+   
 }
 
 export function deleteColumn (id, onReceive, onError) {

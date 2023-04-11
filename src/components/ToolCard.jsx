@@ -76,7 +76,7 @@ export function ToolCard(props) {
     <Stack>
       <CardBody>
         <Heading size='md'>{props.title}</Heading>
-        <Text py='2' h={'20'}>
+        <Text py='2' h={'20'} w={'40'} style={{"overflow":"auto"}}>
           {props.description}
         </Text>
           <Link href={props.url} isExternal>
