@@ -63,6 +63,7 @@ function App() {
   const [createColumnDialogVisible, setCreateColumnDialogVisible] = useState(false);
   const [updatePasswordDialogVisible, setUpdatePasswordDialogVisible] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [tabIndex, setTabIndex] = useState(Number(localStorage.getItem('tabIndex') || 0));
   const fetchTools = useCallback(() => {
     listTools((data)=>{
       setTools(data.data);
@@ -95,6 +96,9 @@ function App() {
       });
     });
   }, []);
+  const getDefaultIndex = useCallback(() => {
+    localStorage.getItem("tabIndex");
+  }, []);
 
   useEffect(function (){
     fetchTools();
@@ -116,6 +120,11 @@ function App() {
     sessionStorage.removeItem("token");
     setMode(modeCustomer);
     onClose();
+  }
+
+  const onTabChange = (index) => {
+    setTabIndex(index);
+    localStorage.setItem("tabIndex", index);
   }
 
   return (
@@ -168,7 +177,10 @@ function App() {
           <Heading>媒体云工具集 v0.2</Heading>
         </Box>
         <Box padding={5}>
-          <Tabs colorScheme='teal'>
+          <Tabs 
+            index={tabIndex}
+            colorScheme='blue' 
+            onChange={onTabChange}>
             <TabList>
               {tools.map((tool, index) => {
                 return <Tab>{tool.name}</Tab>;

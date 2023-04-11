@@ -155,7 +155,10 @@ export function UpdateToolDialog(props) {
                                 <FormLabel>工具图标</FormLabel>
                                 <HStack spacing='24px'>
                                     <div>
-                                        <input id="profile_form" type="file" name='file'/>
+                                        <input 
+                                        id="profile_form" 
+                                        type="file" 
+                                        name='file'/>
                                     </div>
                                     {
                                         renderUploadState()
