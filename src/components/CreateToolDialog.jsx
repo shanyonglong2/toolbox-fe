@@ -19,8 +19,8 @@ import {
     FormLabel,
 } from '@chakra-ui/react';
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons'
-
 import {createTool, listColumns, listEnvironments, uploadProfile} from '../api/api';
+import {FileUploader} from "./FileUploader";
 
 let profile = "";
 export function CreateToolDialog(props) {
@@ -30,7 +30,6 @@ export function CreateToolDialog(props) {
     const [env, setEnv] = useState('');
     const [column, setColumn] = useState('');
     const [description, setDescription] = useState('');
-    const [uploadLoading, setUploadLoading] = useState(false);
     const [uploadState, setUploadState] = useState("pending");
 
     const [environments, setEnvironments] = useState([]);
@@ -90,6 +89,9 @@ export function CreateToolDialog(props) {
             setDescriptionInvalid(true);
             return false;
         }
+        if(uploadState == "loading"){
+            return false;
+        }
         return true;
     }
     const resetForm = () => {
@@ -102,7 +104,6 @@ export function CreateToolDialog(props) {
         setColumnInvalid(false);
         setDescriptionInvalid(false);
         setUploadState("pending");
-        setUploadLoading(false);
     }
     const doCreateTool = () => {
         if(!validTool()) {
@@ -137,15 +138,14 @@ export function CreateToolDialog(props) {
         props.onClose();
     }
 
-    const doUploadProfile = () => {
-        const file = document.getElementById('profile_form').files[0];
-        setUploadLoading(true);
+    const doUploadProfile = (file) => {
+        // const file = document.getElementById('profile_form').files[0];
+        setUploadState("loading");
+        console.log(file);
         uploadProfile(file, (data) => {
-            setUploadLoading(false);
             profile = data.data;
             setUploadState("success");
         }, (err) => {
-            setUploadLoading(false);
             setUploadState("failed");
         });
     };
@@ -197,7 +197,7 @@ export function CreateToolDialog(props) {
 
                             <FormControl>
                                 <FormLabel>工具图标</FormLabel>
-                                <HStack spacing='24px'>
+                                {/* <HStack spacing='24px'>
                                     <div>
                                         <input id="profile_form" type="file" name='file'/>
                                     </div>
@@ -209,8 +209,12 @@ export function CreateToolDialog(props) {
                                         isLoading={uploadLoading}
                                         onClick={()=>doUploadProfile()}
                                     >上传</Button>
-                                </HStack>
-
+                                </HStack> */}
+                                <FileUploader 
+                                    onUpload={doUploadProfile}
+                                    accept="image/*"
+                                    state={uploadState}
+                                />
                             </FormControl>
 
                             <FormControl isRequired>

@@ -21,11 +21,11 @@ import {
 import { CheckIcon, CloseIcon } from '@chakra-ui/icons'
 
 import {updateTool, uploadProfile} from '../api/api';
+import {FileUploader} from "./FileUploader";
 
 let profile = "";
 export function UpdateToolDialog(props) {
     const toast = useToast();
-    const [uploadLoading, setUploadLoading] = useState(false);
     const [uploadState, setUploadState] = useState("pending");
 
     const [nameInvalid, setNameInvalid] = useState(false);
@@ -45,6 +45,9 @@ export function UpdateToolDialog(props) {
             setDescriptionInvalid(true);
             return false;
         }
+        if(uploadState == "loading"){
+            return false;
+        }
         return true;
     }
     const closeDialog = () => {
@@ -59,7 +62,6 @@ export function UpdateToolDialog(props) {
         setURLInvalid(false);
         setDescriptionInvalid(false);
         setUploadState("pending");
-        setUploadLoading(false);
     }
     const doUpdateTool = () => {
         if(!validTool()) {
@@ -93,15 +95,13 @@ export function UpdateToolDialog(props) {
         props.onClose();
     }
 
-    const doUploadProfile = () => {
-        const file = document.getElementById('profile_form').files[0];
-        setUploadLoading(true);
+    const doUploadProfile = (file) => {
+        // const file = document.getElementById('profile_form').files[0];
+        setUploadState("loading");
         uploadProfile(file, (data) => {
-            setUploadLoading(false);
             profile = data.data;
             setUploadState("success");
         }, (err) => {
-            setUploadLoading(false);
             setUploadState("failed");
         });
     };
@@ -153,7 +153,7 @@ export function UpdateToolDialog(props) {
 
                             <FormControl>
                                 <FormLabel>工具图标</FormLabel>
-                                <HStack spacing='24px'>
+                                {/* <HStack spacing='24px'>
                                     <div>
                                         <input 
                                         id="profile_form" 
@@ -168,7 +168,13 @@ export function UpdateToolDialog(props) {
                                         isLoading={uploadLoading}
                                         onClick={()=>doUploadProfile()}
                                     >上传</Button>
-                                </HStack>
+                                </HStack> */}
+                                <FileUploader 
+                                    onUpload={doUploadProfile}
+                                    accept="image/*"
+                                    state={uploadState}
+                                    defaultName={props.tool.profile}
+                                />
 
                             </FormControl>
 

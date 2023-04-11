@@ -62,21 +62,23 @@ export function ToolCard(props) {
     return <Card
     direction={{ base: 'column', sm: 'row' }}
     overflow='hidden'
+    // borderRadius='lg'
     variant='outline'
   >
     <Box marginTop={10} marginLeft={5}>
         <Image
         // objectFit='cover'
+        // borderRadius='full'
         w={{ sm: '80px' }}
         h={{ sm: '70px' }}
         src={props.icon}
-        alt='Caffe Latte'
+        alt={props.title}
         />
     </Box>
     <Stack>
       <CardBody>
         <Heading size='md'>{props.title}</Heading>
-        <Text py='2' h={'20'} w={'40'} style={{"overflow":"auto"}}>
+        <Text py='2' h={'80px'} w={'200px'} style={{"overflow":"auto"}}>
           {props.description}
         </Text>
           <Link href={props.url} isExternal>
